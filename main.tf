@@ -80,6 +80,6 @@ resource "aws_instance" "my_server" {
   user_data              = data.template_file.user_data.rendered
 
   tags = {
-    Name = "Apache Server"
+    Name = "var.server_name"
   }
 }
