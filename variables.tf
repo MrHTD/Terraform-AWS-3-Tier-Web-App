@@ -23,11 +23,12 @@ variable "aws_region" {
 
 variable "db_username" {
   description = "Database username"
+  type        = string
   default     = "postgres"
 }
 
 variable "db_password" {
-  description = "Database password"
+  description = "RDS master password"
   type        = string
   sensitive   = true
 }
