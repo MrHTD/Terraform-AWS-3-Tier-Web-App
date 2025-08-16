@@ -14,18 +14,15 @@ variable "backend_instance_type" {
   description = "Instance type for backend tier"
   type        = string
   default     = "t2.micro"
-  
 }
 
 variable "aws_region" {
   description = "Aws region to deploy resources"
-  type        = string
   default     = "us-east-1"
 }
 
 variable "db_username" {
   description = "Database username"
-  type        = string
   default     = "postgres"
 }
 
@@ -33,5 +30,4 @@ variable "db_password" {
   description = "Database password"
   type        = string
   sensitive   = true
-  default     = "your_password_here"
 }

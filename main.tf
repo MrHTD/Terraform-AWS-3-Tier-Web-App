@@ -122,7 +122,7 @@ resource "aws_vpc_security_group_ingress_rule" "Allow_backend" {
   from_port                    = 5000
   to_port                      = 5000
   ip_protocol                  = "tcp"
-  referenced_security_group_id = aws_security_group.backend_sg.id
+  referenced_security_group_id = aws_security_group.frontend_sg.id
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_backend_outbound" {
@@ -178,8 +178,8 @@ resource "aws_route_table_association" "public_association_02" {
 # Frontend Tier (EC2)
 # -------------------
 resource "aws_instance" "frontend" {
-  ami           = "var.ubuntu_24_04_ami"
-  instance_type = "var.frontend_instance_type"
+  ami           = var.ubuntu_24_04_ami
+  instance_type = var.frontend_instance_type
   subnet_id     = aws_subnet.public_subnet_01.id
   tags = {
     Name        = "FrontendInstance"
@@ -191,8 +191,8 @@ resource "aws_instance" "frontend" {
 # backend Tier (EC2)
 # -------------------
 resource "aws_instance" "backend" {
-  ami           = "var.ubuntu_24_04_ami"
-  instance_type = "var.backend_instance_type"
+  ami           = var.ubuntu_24_04_ami
+  instance_type = var.backend_instance_type
   subnet_id     = aws_subnet.private_subnet_01.id
   tags = {
     Name        = "BackendInstance"
@@ -203,11 +203,11 @@ resource "aws_instance" "backend" {
 # -------------------
 # Database Tier (RDS)
 # -------------------
-resource "aws_db_instance" "database" {
+resource "aws_db_instance" "myRDS" {
   allocated_storage = 20
   engine            = "postgres"
   engine_version   = "17.4-R1"
-  instance_class   = " db.t4g.micro"
+  instance_class   = "db.t4g.micro"
   db_name = "mydb"
   username = var.db_username
   password = var.db_password
