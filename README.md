@@ -178,9 +178,3 @@ Contributions are welcome! To propose changes:
 3. Commit your changes (`git commit -m "Add new feature"`)
 4. Push to your fork (`git push origin feature/my-feature`)
 5. Open a Pull Request
-
----
-
-## 📜 License
-
-This project is licensed under the [MIT License](LICENSE).
