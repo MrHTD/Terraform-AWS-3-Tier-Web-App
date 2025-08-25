@@ -10,17 +10,12 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "vpc_id" {
-  description = "VPC ID where the database will be deployed"
-  type        = string
-}
-
-variable "backend_sg_id" {
-  description = "Security Group ID for the backend instances"
-  type        = string  
-}
-
 variable "private_subnets" {
   description = "List of private subnet IDs for the backend tier"
   type        = list(string)
+}
+
+variable "aws_security_group" {
+  description = "List of security groups to attach to the RDS instance"
+  type        = list(string)  
 }
