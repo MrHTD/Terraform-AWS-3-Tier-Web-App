@@ -19,34 +19,11 @@ resource "aws_security_group" "ec2_connect_sg" {
   vpc_id      = var.vpc_id
 }
 
-resource "aws_security_group" "nat_sg" {
-  name = "nat_sg"
-  description = "Security group for NAT instance"
-  vpc_id = var.vpc_id
-}
-
 resource "aws_security_group" "db_sg" {
   name        = "db_sg"
   description = "Allow traffic from backend on port 5432"
   vpc_id      = var.vpc_id
 }
-
-resource "aws_vpc_security_group_ingress_rule" "nat_inbound" {
-  security_group_id = aws_security_group.nat_sg.id
-  cidr_ipv4         = "0.0.0.0/16"
-  from_port         = 0
-  to_port           = 0
-  ip_protocol       = "-1"
-}
-
-resource "aws_vpc_security_group_egress_rule" "nat_outbound" {
-  security_group_id = aws_security_group.nat_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port = 0
-  to_port   = 0
-  ip_protocol       = "-1"
-}
-
 
 # -----------------------
 #Frontend Security Rules
