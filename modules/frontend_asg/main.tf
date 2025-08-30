@@ -24,6 +24,8 @@ resource "aws_autoscaling_group" "asg" {
   desired_capacity = 2
   min_size = var.asg_min_size
   max_size = var.asg_max_size
+  health_check_type = "EC2"
+  vpc_zone_identifier = var.public_subnet_ids
 
   launch_template {
     id = aws_launch_template.frontend.id

@@ -3,14 +3,14 @@
 # -------------------
 
 module "vpc" {
-  source          = "./modules/vpc"
-  vpc_cidr        = "10.0.0.0/16"
-  vpc_name        = "3TierVPC"
+  source   = "./modules/vpc"
+  vpc_cidr = "10.0.0.0/16"
+  vpc_name = "3TierVPC"
 
   public_subnets  = ["10.0.1.0/24", "10.0.3.0/24"]
   private_subnets = ["10.0.2.0/24", "10.0.4.0/24"]
-  
-  azs             = ["us-east-1a", "us-east-1b"]
+
+  azs = ["us-east-1a", "us-east-1b"]
 }
 
 module "security_group" {
@@ -23,32 +23,32 @@ module "security_group" {
 module "alb" {
   source = "./modules/alb"
 
-  project_name = "frontend-asg"
-  vpc_id = module.vpc.vpc_id
-  public_subnets = module.vpc.public_subnet_ids
+  project_name          = "frontend-asg"
+  vpc_id                = module.vpc.vpc_id
+  public_subnets        = module.vpc.public_subnet_ids
   aws_security_group_id = module.security_group.frontend_sg_id
 }
 
 module "frontend" {
   source = "./modules/frontend_asg"
 
-  public_subnets     = module.vpc.public_subnet_ids
+  public_subnet_ids  = module.vpc.public_subnet_ids
   aws_security_group = [module.security_group.frontend_sg_id]
 }
 
 module "cloudfront" {
   source = "./modules/cloudfront"
 
-  domain_name          = "aws.mrhtd.online"
-  alb_domain_name      = module.alb.alb_dns_name  
-  project_name         = "frontend-asg"
+  domain_name     = "mrhtd.online"
+  alb_domain_name = module.alb.alb_dns_name
+  project_name    = "frontend-asg"
 }
 
 module "route53" {
   source = "./modules/route53"
 
-  cloudfront_domain_name = module.cloudfront.cloudfront_domain_name
-  cloudfront_hosted_zone_id = module.cloudfront.cloudfront_hosted_zone_id  
+  cloudfront_domain_name    = module.cloudfront.cloudfront_domain_name
+  cloudfront_hosted_zone_id = module.cloudfront.cloudfront_hosted_zone_id
 }
 
 module "backend" {

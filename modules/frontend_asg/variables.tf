@@ -10,7 +10,7 @@ variable "frontend_instance_type" {
   default     = "t2.micro"
 }
 
-variable "public_subnets" {
+variable "public_subnet_ids" {
   description = "List of public subnet IDs for the frontend tier"
   type        = list(string)
 }
