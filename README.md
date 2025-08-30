@@ -1,17 +1,14 @@
-# Terraform AWS 3-Tier Web App
+# Terraform AWS Backend with NAT Instance
 
 ## 📌 Overview
 
-This repository contains Terraform code to provision a **3-Tier architecture on AWS**.
-The architecture is divided into three logical layers:
+This repository contains Terraform code to provision a **backend infrastructure on AWS** with a NAT instance for internet access. The architecture includes:
 
-* **Web Tier** – EC2 instances behind a load balancer to handle incoming traffic
-* **Application Tier** – Application servers running business logic
-* **Database Tier** – Managed database (e.g., Amazon RDS)
+* **Private Subnets** – For backend services requiring restricted access
+* **Public Subnets** – Hosting the NAT instance to allow outbound internet traffic for private resources
+* **Networking Components** – VPC, subnets, route tables, and internet gateway
 
-The infrastructure also includes networking (VPC, subnets, routing, NAT, IGW), security groups, and IAM roles where required.
-
-This project can be used for **learning**, **demos**, or as a **baseline for production environments**.
+This project is suitable for **learning**, **demos**, or as a **starting point for production environments**.
 
 ---
 
@@ -36,10 +33,10 @@ Before you begin, ensure you have the following installed and configured:
 ```bash
 .
 ├── modules/              # Reusable Terraform modules
-│   ├── network/          # VPC, subnets, routing, gateways, security groups
-│   ├── web/              # Load balancer + web tier instances
-│   ├── app/              # Application tier instances
-│   └── db/               # RDS or database resources
+│   ├── backend/          
+│   ├── nat-instance/     
+│   ├── security-group/   
+│   └── vpc/              
 ├── main.tf               # Root module that wires everything together
 ├── providers.tf          # AWS provider configuration
 ├── variables.tf          # Input variable definitions
@@ -56,8 +53,8 @@ Before you begin, ensure you have the following installed and configured:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/MrHTD/Terraform-AWS-3-Tier-Web-App.git
-cd Terraform-AWS-3-Tier-Web-App
+git clone https://github.com/MrHTD/Terraform-AWS-Backend-NAT-Instance.git
+cd Terraform-AWS-Backend-NAT-Instance
 ```
 
 ### 2. Initialize Terraform
@@ -86,25 +83,6 @@ terraform destroy
 
 ---
 
-## ⚙️ Variables
-
-You can configure this project by creating a `terraform.tfvars` file (never commit it) or by passing variables directly.
-
-Example `terraform.tfvars.example`:
-
-```hcl
-aws_region           = "us-east-1"
-vpc_cidr             = "10.0.0.0/16"
-public_subnet_cidrs  = ["10.0.1.0/24", "10.0.3.0/24"]
-private_subnet_cidrs = ["10.0.2.0/24", "10.0.4.0/24"]
-
-db_username = "admin"
-db_password = "ChangeMe123!" # Use AWS Secrets Manager in production
-
-instance_type_web = "t3.micro"
-instance_type_app = "t3.micro"
-```
-
 ### Key Variables
 
 | Name                   | Description                    | Example           |
@@ -113,31 +91,14 @@ instance_type_app = "t3.micro"
 | `vpc_cidr`             | CIDR block for the VPC         | `10.0.0.0/16`     |
 | `public_subnet_cidrs`  | CIDRs for public subnets       | `["10.0.1.0/24"]` |
 | `private_subnet_cidrs` | CIDRs for private subnets      | `["10.0.2.0/24"]` |
-| `db_username`          | Database username              | `admin`           |
-| `db_password`          | Database password              | (secure value)    |
-| `instance_type_web`    | EC2 instance type for web tier | `t3.micro`        |
-| `instance_type_app`    | EC2 instance type for app tier | `t3.micro`        |
+| `nat_instance_type`    | EC2 instance type for NAT      | `t2.micro`        |
+| `key_name`             | Name of the EC2 key pair       | `my-key-pair`     |
 
 ---
 
 ## 📤 Outputs
 
 After deployment, Terraform will return useful outputs such as:
-
-* Load Balancer DNS name
-* Web Tier public IPs
-* Application Tier private IPs
-* RDS Endpoint
-* VPC and Subnet IDs
-
-Example:
-
-```
-alb_dns_name = "myapp-alb-1234567890.us-east-1.elb.amazonaws.com"
-db_endpoint  = "myapp-db.abc123xyz.us-east-1.rds.amazonaws.com"
-```
-
----
 
 ## 🔒 Security & Best Practices
 
@@ -147,11 +108,11 @@ db_endpoint  = "myapp-db.abc123xyz.us-east-1.rds.amazonaws.com"
   ```gitignore
   .terraform/
   *.tfstate
-  *.tfstate.*
+  *.tfstate.* 
   terraform.tfvars
   *.pem
   ```
-* Use **AWS Secrets Manager** or **SSM Parameter Store** for sensitive values like DB passwords
+* Use **AWS Secrets Manager** or **SSM Parameter Store** for sensitive values
 * Separate environments (e.g., dev, staging, prod) using:
 
   * Workspaces (`terraform workspace`)
