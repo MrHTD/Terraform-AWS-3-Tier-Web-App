@@ -12,7 +12,4 @@ variable "ubuntu_24_04_ami" {
 
 variable "private_subnet" {}
 
-variable "aws_security_group" {
-  description = "List of security groups to attach to the backend instance"
-  type        = list(string)
-}
+variable "aws_security_group" {}

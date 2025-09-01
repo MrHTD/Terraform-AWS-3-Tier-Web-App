@@ -12,9 +12,6 @@ variable "ami_id" {
 
 variable "public_subnet" {}
 
-variable "aws_security_group" {
-  description = "List of security groups to attach to the backend instance"
-  type        = list(string)
-}
+variable "aws_security_group" {}
 
 variable "aws_internet_gateway" {}
