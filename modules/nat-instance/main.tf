@@ -14,3 +14,14 @@ resource "aws_instance" "nat" {
     Environment = "Production"
   }
 }
+
+
+resource "aws_eip" "nat_eip" {
+  domain = "vpc"
+  depends_on = [var.aws_internet_gateway]
+}
+
+resource "aws_eip_association" "nat_assoc" {
+  allocation_id = aws_eip.nat_eip.id
+  instance_id = aws_instance.nat.id
+}

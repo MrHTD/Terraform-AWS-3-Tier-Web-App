@@ -5,3 +5,4 @@ variable "azs" {
 } 
 
 variable "nat_network_interface_id" {}
+
