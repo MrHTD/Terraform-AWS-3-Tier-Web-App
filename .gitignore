@@ -21,6 +21,8 @@ override.tf.json
 # Local environment files
 .terraformrc
 terraform.rc
+tfplan
+tfplan.*
 
 # IDE/editor settings (optional)
 .vscode/

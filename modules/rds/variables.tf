@@ -10,10 +10,7 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "private_subnets" {
-  description = "List of private subnet IDs for the backend tier"
-  type        = list(string)
-}
+variable "db_subnets" {}
 
 variable "aws_security_group" {
   description = "List of security groups to attach to the RDS instance"

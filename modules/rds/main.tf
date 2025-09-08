@@ -4,7 +4,7 @@
 resource "aws_db_instance" "myRDS" {
   engine                 = "postgres"
   allocated_storage      = 20
-  engine_version         = "17.4"
+  engine_version         = "17"
   instance_class         = "db.t4g.micro"
   db_name                = "mydb"
   username               = var.db_username
@@ -20,7 +20,7 @@ resource "aws_db_instance" "myRDS" {
 # -------------------
 resource "aws_db_subnet_group" "db_subnet" {
   name       = "db_subnet"
-  subnet_ids = var.private_subnets
+  subnet_ids = var.db_subnets
   tags = {
     Name = "DBSubnetGroup"
   }

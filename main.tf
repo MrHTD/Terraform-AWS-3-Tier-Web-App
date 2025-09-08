@@ -3,12 +3,14 @@
 # -------------------
 
 module "vpc" {
-  source   = "./modules/vpc"
-  vpc_cidr = "10.0.0.0/16"
-  vpc_name = "3TierVPC"
+  source                   = "./modules/vpc"
+  vpc_cidr                 = "10.0.0.0/16"
+  vpc_name                 = "3TierVPC"
+  nat_network_interface_id = module.nat_instance.nat_network_interface_id
 
-  public_subnets  = ["10.0.1.0/24", "10.0.3.0/24"]
-  private_subnets = ["10.0.2.0/24", "10.0.4.0/24"]
+  public_subnets  = var.public_subnet_cidrs
+  private_subnets = var.private_subnet_cidrs
+  db_subnets = var.db_subnet_cidrs
 
   azs = ["us-east-1a", "us-east-1b"]
 }
@@ -36,21 +38,6 @@ module "frontend" {
   aws_security_group = [module.security_group.frontend_sg_id]
 }
 
-module "cloudfront" {
-  source = "./modules/cloudfront"
-
-  domain_name     = "mrhtd.online"
-  alb_domain_name = module.alb.alb_dns_name
-  project_name    = "frontend-asg"
-}
-
-module "route53" {
-  source = "./modules/route53"
-
-  cloudfront_domain_name    = module.cloudfront.cloudfront_domain_name
-  cloudfront_hosted_zone_id = module.cloudfront.cloudfront_hosted_zone_id
-}
-
 module "backend" {
   source = "./modules/backend"
 
@@ -58,10 +45,17 @@ module "backend" {
   aws_security_group = [module.security_group.backend_sg_id]
 }
 
+module "nat_instance" {
+  source = "./modules/nat_instance"
+
+  public_subnet      = module.vpc.public_subnet_ids[0]
+  aws_security_group = [module.security_group.nat_instance_sg_id]
+}
+
 module "rds" {
   source = "./modules/rds"
 
-  private_subnets    = module.vpc.private_subnet_ids
+  db_subnets = module.vpc.db_subnets_ids
   aws_security_group = [module.security_group.db_sg_id]
 
   db_username = var.db_username

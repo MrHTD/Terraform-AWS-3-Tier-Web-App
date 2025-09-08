@@ -13,6 +13,12 @@ resource "aws_security_group" "backend_sg" {
   vpc_id      = var.vpc_id
 }
 
+resource "aws_security_group" "nat_instance_sg" {
+  name        = "NAT_instance_sg"
+  description = "Allow SSH to backend via EC2 Instance Connect Endpoint"
+  vpc_id      = var.vpc_id
+}
+
 resource "aws_security_group" "ec2_connect_sg" {
   name        = "ec2_connect_sg"
   description = "Allow SSH to backend via EC2 Instance Connect Endpoint"
@@ -115,6 +121,22 @@ resource "aws_vpc_security_group_ingress_rule" "Allow_backend_ssh" {
 
 resource "aws_vpc_security_group_egress_rule" "allow_backend_outbound" {
   security_group_id = aws_security_group.backend_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
+# ----------------------
+#Nat Instance Security Rules
+# ----------------------
+
+resource "aws_vpc_security_group_ingress_rule" "allow_vpc_to_nat" {
+  security_group_id = aws_security_group.nat_instance_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_nat_outbound" {
+  security_group_id = aws_security_group.nat_instance_sg.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
 }

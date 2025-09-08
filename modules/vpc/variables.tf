@@ -16,6 +16,10 @@ variable "private_subnets" {
   type = list(string)
 }
 
+variable "db_subnets" {}
+
 variable "azs" {
   type = list(string)
 } 
+
+variable "nat_network_interface_id" {}
