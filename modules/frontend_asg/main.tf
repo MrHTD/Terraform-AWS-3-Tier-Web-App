@@ -1,9 +1,9 @@
 # -------------------
 # Frontend Tier (EC2)
 # -------------------
-resource "aws_launch_template" "frontend" {
+resource "aws_launch_template" "frontend_lt" {
   image_id      = var.ami_id
-  name_prefix   = "frontend-"
+  name_prefix   = "${var.project_name}-frontend_lt"
   instance_type = var.frontend_instance_type
   user_data     = filebase64("modules/frontend_asg/config.sh")
 
@@ -20,21 +20,24 @@ resource "aws_launch_template" "frontend" {
 }
 
 resource "aws_autoscaling_group" "asg" {
-  name                = var.asg_name
-  desired_capacity    = 2
-  min_size            = var.asg_min_size
-  max_size            = var.asg_max_size
-  health_check_type   = "EC2"
+  name                = "${var.project_name}-frontend_asg"
+  desired_capacity    = 1
+  min_size            = 1
+  max_size            = 1
   vpc_zone_identifier = var.public_subnet_ids
+  health_check_type   = "EC2"
+  health_check_grace_period = 300
 
   launch_template {
-    id      = aws_launch_template.frontend.id
-    version = aws_launch_template.frontend.latest_version
+    id      = aws_launch_template.frontend_lt.id
+    version = "$Latest"
   }
+
+  target_group_arns = [var.alb_target_group_arn]
 
   tag {
     key                 = "Name"
-    value               = "FrontendASG"
+    value               = "${var.project_name}-Frontend_ASG"
     propagate_at_launch = true
   }
 }

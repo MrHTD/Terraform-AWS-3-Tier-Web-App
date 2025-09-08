@@ -40,8 +40,9 @@ module "frontend" {
   project_name = var.project_name
 
 
-  public_subnet_ids  = module.vpc.public_subnet_ids
-  aws_security_group = [module.security_group.frontend_sg_id]
+  public_subnet_ids    = module.vpc.public_subnet_ids
+  aws_security_group   = [module.security_group.frontend_sg_id]
+  alb_target_group_arn = module.alb.tg_arn
 }
 
 module "backend" {

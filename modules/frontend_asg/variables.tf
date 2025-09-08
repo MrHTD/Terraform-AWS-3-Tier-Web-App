@@ -20,22 +20,6 @@ variable "aws_security_group" {
   type        = list(string)
 }
 
-variable "asg_name" {
-  description = "The name of the Auto Scaling group"
-  type        = string
-  default = "frontend-asg"
-}
-
-variable "asg_min_size" {
-  description = "The minimum size of the Auto Scaling group"
-  type        = number 
-  default = 1
-}
-
-variable "asg_max_size" {
-  description = "The maximum size of the Auto Scaling group"
-  type        = number  
-  default = 2
-}
-
 variable "project_name" {}
+
+variable "alb_target_group_arn" {}
