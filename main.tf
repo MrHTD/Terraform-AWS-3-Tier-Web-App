@@ -22,7 +22,6 @@ module "nat_instance" {
 
   public_subnet      = module.vpc.public_subnet_id
   aws_security_group = [module.security_group.nat_instance_sg_id]
-  aws_internet_gateway = module.vpc.aws_internet_gateway_id
 }
 
 

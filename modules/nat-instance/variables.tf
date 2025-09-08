@@ -4,14 +4,14 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
-variable "ami_id" {
-  description = "Amazon Linux 2 AMI ID"
+variable "ubuntu_24_04_ami" {
+  description = "AMI for Ubuntu 24.04"
   type        = string
-  default     = "ami-00ca32bbc84273381"
+  default     = "ami-020cba7c55df1f615"
 }
 
 variable "public_subnet" {}
 
 variable "aws_security_group" {}
 
-variable "aws_internet_gateway" {}
+# variable "aws_internet_gateway" {}
