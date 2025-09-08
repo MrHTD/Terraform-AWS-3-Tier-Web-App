@@ -10,7 +10,7 @@ variable "frontend_instance_type" {
   default     = "t2.micro"
 }
 
-variable "public_subnet_ids" {
+variable "public_subnets" {
   description = "List of public subnet IDs for the frontend tier"
   type        = list(string)
 }
@@ -21,5 +21,3 @@ variable "aws_security_group" {
 }
 
 variable "project_name" {}
-
-variable "alb_target_group_arn" {}

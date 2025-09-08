@@ -25,24 +25,13 @@ module "security_group" {
   public_subnets = module.vpc.public_subnet_ids
 }
 
-module "alb" {
-  source       = "./modules/alb"
-  project_name = var.project_name
-
-
-  vpc_id                = module.vpc.vpc_id
-  public_subnets        = module.vpc.public_subnet_ids
-  aws_security_group_id = module.security_group.frontend_sg_id
-}
-
 module "frontend" {
-  source       = "./modules/frontend_asg"
+  source       = "./modules/frontend"
   project_name = var.project_name
 
 
-  public_subnet_ids    = module.vpc.public_subnet_ids
-  aws_security_group   = [module.security_group.frontend_sg_id]
-  alb_target_group_arn = module.alb.tg_arn
+  public_subnets     = module.vpc.public_subnet_ids
+  aws_security_group = [module.security_group.frontend_sg_id]
 }
 
 module "backend" {

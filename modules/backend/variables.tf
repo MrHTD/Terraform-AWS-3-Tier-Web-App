@@ -4,7 +4,7 @@ variable "backend_instance_type" {
   default     = "t2.micro"
 }
 
-variable "ubuntu_24_04_ami" {
+variable "ami_id" {
   description = "AMI for Ubuntu 24.04"
   type        = string
   default     = "ami-020cba7c55df1f615"
