@@ -10,7 +10,7 @@ resource "aws_instance" "nat_instance" {
   source_dest_check = false
   # Ensure the backend instance can communicate with the database
   tags = {
-    Name        = "NatInstance"
+    Name        = "${var.project_name}-NatInstance"
     Environment = "Production"
   }
 }

@@ -16,3 +16,5 @@ variable "aws_security_group" {
   description = "List of security groups to attach to the RDS instance"
   type        = list(string)  
 }
+
+variable "project_name" {}

@@ -1,3 +1,8 @@
+variable "project_name" {
+  description = "Project name"
+  default     = "3Tier"
+}
+
 variable "aws_region" {
   description = "Aws region to deploy resources"
   default     = "us-east-1"

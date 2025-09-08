@@ -3,10 +3,7 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "vpc_name" {
-  type        = string
-  default     = "3TierVPC"
-}
+variable "project_name" {}
 
 variable "public_subnets" {
   type = list(string)

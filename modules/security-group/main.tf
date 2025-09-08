@@ -96,7 +96,7 @@ resource "aws_ec2_instance_connect_endpoint" "backend_endpoint" {
   security_group_ids = [aws_security_group.ec2_connect_sg.id]
 
   tags = {
-    Name = "BackendInstanceConnectEndpoint"
+    Name = "${var.project_name}-BackendInstanceConnectEndpoint"
   }
 }
 

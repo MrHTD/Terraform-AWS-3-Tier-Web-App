@@ -13,3 +13,5 @@ variable "ami_id" {
 variable "public_subnet" {}
 
 variable "aws_security_group" {}
+
+variable "project_name" {}

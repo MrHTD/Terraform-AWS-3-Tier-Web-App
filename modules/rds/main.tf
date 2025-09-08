@@ -13,6 +13,11 @@ resource "aws_db_instance" "myRDS" {
   skip_final_snapshot    = true
   vpc_security_group_ids = var.aws_security_group
   db_subnet_group_name   = aws_db_subnet_group.db_subnet.name
+
+  tags = {
+    Name = "${var.project_name}-RDS"
+    Environment = "Production"
+  }
 }
 
 # -------------------
@@ -22,6 +27,6 @@ resource "aws_db_subnet_group" "db_subnet" {
   name       = "db_subnet"
   subnet_ids = var.db_subnets
   tags = {
-    Name = "DBSubnetGroup"
+    Name = "${var.project_name}-DBSubnetGroup"
   }
 }

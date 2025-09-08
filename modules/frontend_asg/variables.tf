@@ -1,4 +1,4 @@
-variable "ubuntu_24_04_ami" {
+variable "ami_id" {
   description = "AMI for Ubuntu 24.04"
   type        = string
   default     = "ami-020cba7c55df1f615"
@@ -37,3 +37,5 @@ variable "asg_max_size" {
   type        = number  
   default = 2
 }
+
+variable "project_name" {}

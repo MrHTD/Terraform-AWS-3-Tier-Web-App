@@ -2,14 +2,14 @@ resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   tags = {
-    Name = var.vpc_name
+    Name = var.project_name
   }
 }
 
 resource "aws_internet_gateway" "main_gw" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "${var.vpc_name}-gw"
+    Name = "${var.project_name}-gw"
   }
 }
 
@@ -23,7 +23,7 @@ resource "aws_subnet" "public_subnets" {
   map_public_ip_on_launch = true
   availability_zone       = var.azs[count.index]
   tags = {
-    Name = "${var.vpc_name}-public-${count.index}"
+    Name = "${var.project_name}-public-subnet-${count.index}"
   }
 }
 
@@ -36,7 +36,7 @@ resource "aws_subnet" "private_subnets" {
   cidr_block        = var.private_subnets[count.index]
   availability_zone = var.azs[count.index]
   tags = {
-    Name = "${var.vpc_name}-private-${count.index}"
+    Name = "${var.project_name}-private-subnet-${count.index}"
   }
 }
 
@@ -49,17 +49,17 @@ resource "aws_subnet" "db_subnets" {
   cidr_block        = var.db_subnets[count.index]
   availability_zone = var.azs[count.index]
   tags = {
-    Name = "${var.vpc_name}-db-${count.index}"
+    Name = "${var.project_name}-db-subnet-${count.index}"
   }
 }
 
 # -------------------
-# Route Table
+# Public Route Table
 # -------------------
 resource "aws_route_table" "public_rtb" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "${var.vpc_name}-public-rtb"
+    Name = "${var.project_name}-public-rtb"
   }
 }
 
@@ -75,10 +75,14 @@ resource "aws_route_table_association" "public_associations" {
   route_table_id = aws_route_table.public_rtb.id
 }
 
+# -------------------
+# Private Route Table
+# -------------------
+
 resource "aws_route_table" "private_rtb" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "${var.vpc_name}-private-rtb"
+    Name = "${var.project_name}-private-rtb"
   }
 }
 
@@ -92,4 +96,21 @@ resource "aws_route_table_association" "private_associations" {
   count          = length(aws_subnet.private_subnets)
   subnet_id      = aws_subnet.private_subnets[count.index].id
   route_table_id = aws_route_table.private_rtb.id
+}
+
+# -------------------
+# Database Route Table
+# -------------------
+
+resource "aws_route_table" "db_rtb" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "${var.project_name}-db-rtb"
+  }  
+}
+
+resource "aws_route_table_association" "db_associations" {
+  count = length(aws_subnet.db_subnets)
+  subnet_id = aws_subnet.db_subnets[count.index].id
+  route_table_id = aws_route_table.db_rtb.id
 }

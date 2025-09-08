@@ -9,7 +9,7 @@ resource "aws_instance" "backend" {
   vpc_security_group_ids = var.aws_security_group
   # Ensure the backend instance can communicate with the database
   tags = {
-    Name        = "BackendInstance"
+    Name = "${var.project_name}-BackendInstance"
     Environment = "Production"
   }
 }
